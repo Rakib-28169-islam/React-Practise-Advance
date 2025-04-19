@@ -19,6 +19,7 @@ const Posts = () => {
     data: users,
     isLoading: isUserLoading,
     isError: isUserError,
+    refetch
   } = useQuery({
     queryKey: ["users"],
     queryFn: fetchUsers,
@@ -28,6 +29,7 @@ const Posts = () => {
     data: posts,
     isLoading: isPostLoading,
     isError: isPostError,
+    refetch: refetchPosts
   } = useQuery({
     queryKey: ["posts"],
     queryFn: fetchPosts,
@@ -38,11 +40,14 @@ const Posts = () => {
     return user ? user?.name : "Unknown User";
   };
 
-  if (isUserLoading || isPostLoading) return <p>Loading...</p>;
+  if ( isPostLoading) return <p>Loading...</p>;
   if (isUserError || isPostError) return <p>Something went wrong!</p>;
 
   return (
     <div>
+        <button onClick={refetch}>Refetch Users</button>
+        <button onClick={refetchPosts} disabled={isPostLoading}>Refetch Posts</button>
+        {isPostLoading && <p>Loading posts...</p>}
       <h2>Posts</h2>
       <ul>
         {posts.map((post) => (
